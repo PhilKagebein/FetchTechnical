@@ -30,8 +30,8 @@ class MainFragment : Fragment() {
 
         viewModel.getFetchHiringData()
 
-        viewModel.hiringData.observe(viewLifecycleOwner) { itemList ->
-            println(itemList)
+        viewModel.formatHiringData().observe(viewLifecycleOwner) { massagedItemsList ->
+            println(massagedItemsList)
         }
     }
 

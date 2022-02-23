@@ -3,9 +3,7 @@ package com.example.fetchtechnical.ui.main
 import android.app.Application
 import android.content.res.Resources
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.fetchtechnical.R
 import com.example.fetchtechnical.models.ItemModel
 import com.example.fetchtechnical.repository.Repository
@@ -15,6 +13,7 @@ import retrofit2.Response
 class MainViewModel(private val repository: Repository, private val application: Application, private val resources: Resources) : ViewModel() {
 
     val hiringData: MutableLiveData<List<ItemModel>> = MutableLiveData()
+    val itemsMap = mutableMapOf<Int, MutableList<ItemModel>>()
 
     fun getFetchHiringData() {
         viewModelScope.launch {
@@ -27,6 +26,33 @@ class MainViewModel(private val repository: Repository, private val application:
             }
 
         }
+    }
+
+    fun formatHiringData(): LiveData<List<ItemModel>> = hiringData.map { itemsList ->
+        val massagedItemsList = mutableListOf<ItemModel>()
+        for (item in itemsList) {
+            if ( !item.name.isNullOrEmpty() ) {
+
+                if (itemsMap.containsKey(item.listId)) {
+                    itemsMap[item.listId]?.add(item)
+                } else {
+                    itemsMap[item.listId] = mutableListOf(item)
+                }
+            }
+        }
+
+        for (key in itemsMap.keys.sorted()) {
+            itemsMap[key]?.let { it ->
+                massagedItemsList.addAll(it.sortedWith { firstItem, secondItem -> getIntFromString(firstItem?.name) - getIntFromString(secondItem?.name) })
+            }
+        }
+
+        massagedItemsList
+    }
+
+    private fun getIntFromString(string: String?): Int {
+        val int = string?.replace("\\D".toRegex(), "")?.toInt()
+        int?.let { return int } ?: run { return 0 }
     }
     
     companion object {
