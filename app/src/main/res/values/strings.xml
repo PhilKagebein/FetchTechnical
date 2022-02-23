@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FetchTechnical</string>
+    <string name="unsuccessful_response">Attempt to retrieve data not successful.</string>
 </resources>
