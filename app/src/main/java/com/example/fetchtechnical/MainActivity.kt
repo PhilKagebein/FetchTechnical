@@ -1,7 +1,7 @@
 package com.example.fetchtechnical
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.fetchtechnical.databinding.MainActivityBinding
 import com.example.fetchtechnical.ui.main.MainFragment
 

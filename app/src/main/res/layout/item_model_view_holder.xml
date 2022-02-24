@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.main.MainFragment"
+    android:orientation="horizontal"
+    android:layout_marginVertical="@dimen/recycler_view_item_margin_vertical">
+
+    <TextView
+        android:id="@+id/idTextView"
+        android:layout_width="@dimen/item_model_view_holder_text_view_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="@dimen/recycler_view_text_size"
+        android:layout_marginStart="@dimen/recycler_view_horizontal_margin"
+        />
+
+    <TextView
+        android:id="@+id/listIdTextView"
+        android:layout_width="@dimen/item_model_view_holder_text_view_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="@dimen/recycler_view_text_size"
+ />
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="@dimen/item_model_view_holder_text_view_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="@dimen/recycler_view_text_size"
+        android:layout_marginEnd="@dimen/recycler_view_horizontal_margin"/>
+
+</LinearLayout>

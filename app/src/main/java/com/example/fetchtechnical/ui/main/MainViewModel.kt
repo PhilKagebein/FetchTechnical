@@ -8,12 +8,10 @@ import com.example.fetchtechnical.R
 import com.example.fetchtechnical.models.ItemModel
 import com.example.fetchtechnical.repository.Repository
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class MainViewModel(private val repository: Repository, private val application: Application, private val resources: Resources) : ViewModel() {
 
-    val hiringData: MutableLiveData<List<ItemModel>> = MutableLiveData()
-    val itemsMap = mutableMapOf<Int, MutableList<ItemModel>>()
+    private val hiringData: MutableLiveData<List<ItemModel>> = MutableLiveData()
 
     fun getFetchHiringData() {
         viewModelScope.launch {
@@ -29,25 +27,38 @@ class MainViewModel(private val repository: Repository, private val application:
     }
 
     fun formatHiringData(): LiveData<List<ItemModel>> = hiringData.map { itemsList ->
-        val massagedItemsList = mutableListOf<ItemModel>()
-        for (item in itemsList) {
-            if ( !item.name.isNullOrEmpty() ) {
+        val filteredItemsMap = filterOutNullAndBlankEntries(itemsList)
+        sortByName(filteredItemsMap)
+    }
 
+    private fun filterOutNullAndBlankEntries(itemsList: List<ItemModel>): MutableMap<Int, MutableList<ItemModel>> {
+        val itemsMap = mutableMapOf<Int, MutableList<ItemModel>>()
+
+        for (item in itemsList) {
+
+            if ( !item.name.isNullOrEmpty() ) {
                 if (itemsMap.containsKey(item.listId)) {
                     itemsMap[item.listId]?.add(item)
                 } else {
                     itemsMap[item.listId] = mutableListOf(item)
                 }
             }
+
         }
 
-        for (key in itemsMap.keys.sorted()) {
-            itemsMap[key]?.let { it ->
-                massagedItemsList.addAll(it.sortedWith { firstItem, secondItem -> getIntFromString(firstItem?.name) - getIntFromString(secondItem?.name) })
+        return itemsMap
+    }
+
+    private fun sortByName(filteredItemsMap: MutableMap<Int, MutableList<ItemModel>>): MutableList<ItemModel> {
+        val sortedItemsList = mutableListOf<ItemModel>()
+
+        for (key in filteredItemsMap.keys.sorted()) {
+            filteredItemsMap[key]?.let { it ->
+                sortedItemsList.addAll(it.sortedWith { firstItem, secondItem -> getIntFromString(firstItem?.name) - getIntFromString(secondItem?.name) })
             }
         }
 
-        massagedItemsList
+        return sortedItemsList
     }
 
     private fun getIntFromString(string: String?): Int {
