@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">FetchTechnical</string>
     <string name="unsuccessful_response">Attempt to retrieve data not successful.</string>
+    <string name="item_id_text">ID: %1$s</string>
+    <string name="item_list_id_text">List ID: %1$s</string>
+    <string name="item_name_text">Name: %1$s</string>
 </resources>

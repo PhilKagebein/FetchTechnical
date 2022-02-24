@@ -6,7 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.fetchtechnical.ItemListAdapter
 import com.example.fetchtechnical.databinding.MainFragmentBinding
+import com.example.fetchtechnical.models.ItemModel
 import com.example.fetchtechnical.repository.Repository
 
 class MainFragment : Fragment() {
@@ -26,13 +31,26 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initMainViewModel()
 
+        initMainViewModel()
         viewModel.getFetchHiringData()
 
         viewModel.formatHiringData().observe(viewLifecycleOwner) { massagedItemsList ->
-            println(massagedItemsList)
+            initRecyclerView(massagedItemsList)
         }
+    }
+
+    private fun initRecyclerView(massagedItemsList: List<ItemModel>) {
+        val recyclerAdapter = ItemListAdapter(resources)
+
+        binding.recyclerView.apply {
+            adapter = recyclerAdapter
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+        }
+
+        recyclerAdapter.submitList(massagedItemsList)
+
     }
 
     private fun initMainViewModel() {
